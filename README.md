@@ -1,10 +1,10 @@
-# 📟 [DEVICE NAME] - ESPHome Configuration
+# 📟 ESPHome Water Meter 
 
 [![ESPHome Version](https://img.shields.io/badge/ESPHome-2026.1.0+-00b0ff.svg?logo=esphome&logoColor=white)](https://esphome.io/)
 [![Hardware](https://img.shields.io/badge/Hardware-ESP32-blue.svg)](https://www.espressif.com/en/products/socs/esp32)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This repository contains the ESPHome configuration for the **[Device Model/Name]**. This hardware is designed to integrate natively with Home Assistant, providing local control and real-time telemetry.
+This repository contains the ESPHome configuration for the **ESPHome Water Meter** using the [ESP32 MultiBoard](https://github.com/thebeaverdam/ESP32_MultiBoard) and the FS300A flow meter. This hardware is designed to integrate natively with Home Assistant, providing local control and real-time telemetry.
 
 ---
 
@@ -12,7 +12,8 @@ This repository contains the ESPHome configuration for the **[Device Model/Name]
 
 Before you begin, ensure you have:
 * [ESPHome](https://esphome.io/guides/installing_esphome.html) installed (CLI or Dashboard).
-* A high-quality USB data cable.
+* An ESP32 MultiBoard.
+* A FS300A flow meter.
 * Cloned this repository to your local machine.
 
 ## 🚀 Quick Start
@@ -28,26 +29,22 @@ Before you begin, ensure you have:
 2.  **Compile and Flash:**
     Connect your ESP32 via USB and run:
     ```bash
-    esphome run device_name.yaml
+    esphome run water_meter.yaml
     ```
 
 ---
 
-## 🏗️ Project Structure
 
-* `firmware/`: Main `.yaml` configuration files.
-* `docs/`: Wiring diagrams and schematics.
-* `resources/`: Device images or custom icons.
+## 🔌 Connections with FS300A
 
+The FS300A works at 5V, so we need to use the I2C 5V connector from the MultiBoard to take advantage of the level shifter that comes integrated and protect the board.
 
-## 🔌 Pinout Configuration
-
-| Component | GPIO Pin | Function |
+| FS300A | MultiBoard | Function |
 | :--- | :--- | :--- |
-| **Relay 1** | GPIO12 | Main Load Control |
-| **Status LED** | GPIO2 | Connectivity Indicator |
-| **I2C SDA** | GPIO21 | Environmental Sensor |
-| **I2C SCL** | GPIO22 | Environmental Sensor |
+| **Red** | +5V | VCC |
+| **Black** | GND | Ground |
+| **Yellow** | GPIO21 | Pulse counter |
+
 
 ---
 

@@ -1,0 +1,59 @@
+esphome:
+  name: water-meter
+  friendly_name: Water Meter
+  project:
+    name: "thebeaverdam.water-meter"
+    version: "1.0.0"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Allow the user to adopt and edit the code from their ESPHome dashboard
+dashboard_import:
+  package_import_url: github://thebeaverdam/ESPHome_WaterMeter/firmware/water_meter.yaml
+
+# Wi-Fi configuration with Fallback AP and Improv for easy commercial setup
+wifi:
+  # The user will configure their network via Improv or the Captive Portal
+  ap:
+    ssid: "Water Meter Setup"
+
+improv_serial:
+# Captive portal for fallback configuration when Wi-Fi is not connected
+captive_portal:
+
+# Componentes standard para Home Assistant
+api:
+ota:
+logger:
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+web_server:
+  port: 80
+
+mdns:
+
+sensor:
+  - platform: pulse_meter
+    pin:
+      number: 26
+      mode: INPUT_PULLUP
+    name: "Water Flow Rate"
+    id: water_flow_rate
+    unit_of_measurement: "L/min"
+    icon: "mdi:water-pump"
+    # FS300A 1" Sensor: Frequency (Hz) = 5.5 * Q (L/min)
+    # pulse_meter reports pulses per minute by default.
+    # Q = pulses_per_min / (5.5 * 60) = pulses_per_min / 330
+    filters:
+      - lambda: return x / 330.0;
+    total:
+      name: "Total Water Consumption"
+      unit_of_measurement: "L"
+      icon: "mdi:water-check"
+      filters:
+        - lambda: return x / 330.0;
